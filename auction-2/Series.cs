@@ -36,10 +36,10 @@ namespace auction_2
             var lastOrDefault = _sales.LastOrDefault();
             if (lastOrDefault != null) sale.Number = lastOrDefault.Number + 1;
 
-            if (sale.Duration < Settings.MinSaleDuration)
-            {
-                sale.Duration = Settings.MinSaleDuration;
-            }
+            //if (sale.Duration < Settings.MinSaleDuration)
+            //{
+            //    sale.Duration = Settings.MinSaleDuration;
+            //}
             _sales.Add(sale);
         }
 

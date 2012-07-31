@@ -12,10 +12,10 @@ namespace auction_2
 
         public AuctionSettings()
         {
-            LoadConfig();
+            ReLoadConfig();
         }
 
-        public void LoadConfig()
+        public void ReLoadConfig()
         {
             MinSaleDuration = TimeSpan.FromSeconds(Double.Parse(ConfigurationManager.AppSettings["MinSaleDurationInSeconds"]));
         }

@@ -9,6 +9,7 @@ namespace auction_2
     {
         static void Main(string[] args)
         {
+            var settings = new AuctionSettings();
         }
     }
 }
