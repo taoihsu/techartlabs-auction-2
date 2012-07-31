@@ -24,7 +24,7 @@ namespace auction_2
         public ReadOnlyCollection<Seller> Sellers {get{return new ReadOnlyCollection<Seller>(_sellers);}} 
         public ReadOnlyCollection<Buyer> Buyers {get {return new ReadOnlyCollection<Buyer>(_buyers);}}
 
-        private AuctionSettings settings;
+        public AuctionSettings Settings { get; private set; }
 
         public Auction()
         {
@@ -35,6 +35,9 @@ namespace auction_2
             _categories = new List<Category>();
             _sellers = new List<Seller>();
             _buyers = new List<Buyer>();
+
+            Settings = new AuctionSettings();
+
         }
         
         public void MakeBid()
