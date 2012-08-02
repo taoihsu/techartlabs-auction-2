@@ -63,6 +63,7 @@
     <Compile Include="AuctionSettings.cs" />
     <Compile Include="Bid.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="Events\BidEventArgs.cs" />
     <Compile Include="Lot.cs" />
     <Compile Include="people\Buyer.cs" />
     <Compile Include="people\Person.cs" />
@@ -96,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ToDo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
