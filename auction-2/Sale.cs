@@ -13,7 +13,7 @@ namespace auction_2
         public Lot Lot { get; private set; }
         public Category Category { get; private set; }
         public Series Series { get; private set; }
-        public Bid LastBid { get; private set; } //private?
+        public Bid LastBid { get; set; } //private?
         public Seller Seller { get; private set; }
         public Buyer Buyer { get { return !IsSaled ? null : LastBid.Bidder; } }
 
@@ -51,12 +51,6 @@ namespace auction_2
             }
             Duration = duration;
             Category = category;
-        }
-
-        // перенести в обязанности аукциона
-        private bool CorrectBid(Bid bid)
-        {
-            return (bid.Value - CurrentPrice >= Increment) && (DateTime.Now < FinishTime) && (LastBidder != bid.Bidder);
         }
     }
 }
