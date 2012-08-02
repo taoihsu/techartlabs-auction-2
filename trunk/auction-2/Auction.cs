@@ -25,8 +25,10 @@ namespace auction_2
         public ReadOnlyCollection<Seller> Sellers {get{return new ReadOnlyCollection<Seller>(_sellers);}} 
         public ReadOnlyCollection<Buyer> Buyers {get {return new ReadOnlyCollection<Buyer>(_buyers);}}
         public AuctionSettings Settings { get; private set; }
-
         
+
+
+
         public Auction()
         {
             _bids = new List<Bid>();
@@ -71,9 +73,6 @@ namespace auction_2
         {
             if (IsCorrectSale(sale))
             {
-                AddLot(sale.Lot);
-                _sales.Add(sale);
-
                 var lastOrDefault = _sales.LastOrDefault();
                 if (lastOrDefault != null) sale.Number = lastOrDefault.Number + 1;
 
@@ -81,6 +80,11 @@ namespace auction_2
                 {
                     sale.Duration = Settings.MinSaleDuration;
                 }
+
+
+                AddLot(sale.Lot);
+                _sales.Add(sale);
+                sale.Start();
             }
 
         }
@@ -104,7 +108,6 @@ namespace auction_2
         {
             return _sales.Where(s => s.IsSaled && s.Seller == seller);
         }
-
 
         public void MakeBid(Bid bid)
         {
@@ -137,4 +140,5 @@ namespace auction_2
                    sale.Lot != null;
         }
     }
+
 }

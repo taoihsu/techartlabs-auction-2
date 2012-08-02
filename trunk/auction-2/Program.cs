@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using auction_2.Events;
 
 namespace auction_2
 {
@@ -14,8 +15,8 @@ namespace auction_2
             // Создаем аукцион и регистрируем продавцов и покупателей
             var auction = new Auction();
 
-            var bidSignaler = new Thread(BidSignal);
-            bidSignaler.Start(auction);
+            //var bidSignaler = new Thread(BidSignal);
+            //bidSignaler.Start(auction);
 
 
             auction.AddBuyer(new Buyer("blogin1", "Fred", "Durst"));
@@ -34,11 +35,13 @@ namespace auction_2
             var sale1 = new Sale("Hamer Standard guitar USA 1976",
                                   new Lot("Hamer Standard guitar USA 1976", "Super Guitar!", null),
                                   auction.Series.FirstOrDefault(s => s.Name == "Musical Instruments"),
-                                  auction.Sellers.First(s => s.Login == "slogin2"), 101, 3, TimeSpan.FromSeconds(2),
+                                  auction.Sellers.First(s => s.Login == "slogin2"), 101, 3, TimeSpan.FromSeconds(1.1),
                                   auction.Categories.FirstOrDefault(c => c.Name == "Elite"));
             auction.AddSale(sale1);
-            var waitForFinish = new Thread(FinishMessage);
-            waitForFinish.Start(sale1);
+
+
+            //var waitForFinish = new Thread(FinishMessage);
+            //waitForFinish.Start(sale1);
 
             var b1 = new Bid(sale1, 105, auction.Buyers.First(b => b.Login == "blogin1"));
             var b2 = new Bid(sale1, 110, auction.Buyers.First(b => b.Login == "blogin1"));
@@ -49,27 +52,57 @@ namespace auction_2
             var b7 = new Bid(sale1, 125, auction.Buyers.First(b => b.Login == "blogin3"));
             var b8 = new Bid(sale1, 150, auction.Buyers.First(b => b.Login == "blogin1"));
 
+
+            sale1.BidMaked += ReportBid;
+            sale1.SaleFinished += ReportSaleFinish;
+
             auction.MakeBid(b1);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b2);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b3);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b4);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b5);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b6);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b7);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             auction.MakeBid(b8);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
 
 
 
         }
 
+        public static void ReportBid(object sender, BidEventArgs args)
+        {
+            var bid = args.Bid;
+            Console.WriteLine("bid:\t{0}\tbidder:\t{1}\tlot:\t{2}", bid.Value,
+                                         bid.Bidder.Login, bid.Sale.Name);
+        }
+
+        public static void ReportSaleFinish(object sender, EventArgs args)
+        {
+            var sale = (Sale)sender;
+            if (sale.LastBid != null)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("sale #" + sale.Number + " finished!\tWinnwer:\t" + (sale.Buyer == null ? "none" : sale.Buyer.Login) + "\tPRICE: "
+                + sale.CurrentPrice);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("sale #" + sale.Number + " finished with no bids :(");
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+
+        /* Старые методы проверки
         public static void BidSignal(object auction)
         {
             var auc = (Auction) auction;
@@ -94,5 +127,6 @@ namespace auction_2
             Console.WriteLine("sale #" + sale.Number + " finished!\tWinnwer:\t" + (sale.Buyer == null ? "none" : sale.Buyer.Login) + "\tPRICE: "
             + sale.CurrentPrice);
         }
+         */
     }
 }

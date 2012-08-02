@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using auction_2.Events;
 
 namespace auction_2
 {
@@ -13,7 +15,15 @@ namespace auction_2
         public Lot Lot { get; private set; }
         public Category Category { get; private set; }
         public Series Series { get; private set; }
-        public Bid LastBid { get; set; } //private?
+        private Bid _lastBid;
+        public Bid LastBid
+        {
+            get { return _lastBid; }
+            set { 
+                _lastBid = value;
+                OnBidMaked(value);
+            }
+        }
         public Seller Seller { get; private set; }
         public Buyer Buyer { get { return !IsSaled ? null : LastBid.Bidder; } }
 
@@ -29,9 +39,12 @@ namespace auction_2
         public DateTime FinishTime { get { return StartTime + Duration; } }
 
         public bool IsStarted { get { return DateTime.Now >= StartTime; } }
-        public bool IsFinished { get { return DateTime.Now >= FinishTime; } }
+        public bool IsFinished { get { return DateTime.Now > FinishTime; } }
         public bool IsActive { get { return IsStarted && !IsFinished; } }
         public bool IsSaled { get { return (LastBid!=null) && (IsFinished); } }
+
+        public event EventHandler<BidEventArgs> BidMaked;
+        public event EventHandler<EventArgs> SaleFinished;
 
         public Sale(string name, Lot lot, Series series, Seller seller, double startPrice, 
             double increment, TimeSpan duration, Category category)
@@ -40,17 +53,43 @@ namespace auction_2
             Number = 0;
             Lot = lot;
             Series = series;
-            StartTime = DateTime.Now;
             StartPrice = startPrice;
             Increment = increment;
             Seller = seller;
-          
-            if (duration < TimeSpan.FromMinutes(1))
-            {
-                duration = TimeSpan.FromSeconds(1); //исправить! проверка на уровне Аукциона
-            }
             Duration = duration;
             Category = category;
+        }
+
+        public void Start()
+        {
+            StartTime = DateTime.Now;
+            var waitForfinishThread = new Thread(WaitForFinish);
+            waitForfinishThread.Start();          
+        }
+
+        private void WaitForFinish()
+        {
+            //вычислять точное значеие?
+            Thread.Sleep(Duration);
+            OnSaleFinished(LastBid);
+
+        }
+
+        protected virtual void OnBidMaked(Bid newBid)
+        {
+            EventHandler<BidEventArgs> local = BidMaked;
+            if (local != null)
+            {
+                local(this,new BidEventArgs(newBid));
+            }
+        }
+        protected virtual void OnSaleFinished(Bid lastBid)
+        {
+            EventHandler<EventArgs> local = SaleFinished;
+            if (local != null)
+            {
+                local(this, new EventArgs());
+            }
         }
     }
 }
