@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading;
 using auction_2.Events;
 
@@ -9,7 +6,6 @@ namespace auction_2
 {
     public class Sale
     {
-        //
         public string Name { get; private set; }
         public int Number { get; set; }
         public Lot Lot { get; private set; }
@@ -71,6 +67,7 @@ namespace auction_2
         {
             //вычислять точное значеие?
             Thread.Sleep(Duration);
+            //сюда забомбить Таймер!
             OnSaleFinished();
 
         }
