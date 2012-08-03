@@ -1,5 +1,6 @@
 ﻿TO - DO - TO - DO - TO - DO - TO - DO - TO - DO - TO - DO - TO - DO - TO - DO
 
+- Thread.Sleep() -> Timer
 - события аукциона: окончание торгов, успешная ставка(лот)
 	+ события лота
 		+ ставка
