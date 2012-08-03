@@ -59,11 +59,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveBuyersBehavior\SummarySalesBehavior.cs" />
     <Compile Include="Auction.cs" />
     <Compile Include="AuctionSettings.cs" />
     <Compile Include="Bid.cs" />
     <Compile Include="Category.cs" />
-    <Compile Include="Events\BidEventArgs.cs" />
+    <Compile Include="Events\EventArgs.cs" />
+    <Compile Include="Interfaces\IActiveBuyersBehavior.cs" />
     <Compile Include="Lot.cs" />
     <Compile Include="people\Buyer.cs" />
     <Compile Include="people\Person.cs" />
@@ -96,11 +98,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ToDo.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

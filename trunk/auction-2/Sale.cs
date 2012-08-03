@@ -43,8 +43,8 @@ namespace auction_2
         public bool IsActive { get { return IsStarted && !IsFinished; } }
         public bool IsSaled { get { return (LastBid!=null) && (IsFinished); } }
 
-        public event EventHandler<BidEventArgs> BidMaked;
-        public event EventHandler<EventArgs> SaleFinished;
+        public event EventHandler<EventArgs<Bid>> BidMaked;
+        public event EventHandler<EventArgs<Sale>> SaleFinished;
 
         public Sale(string name, Lot lot, Series series, Seller seller, double startPrice, 
             double increment, TimeSpan duration, Category category)
@@ -71,24 +71,24 @@ namespace auction_2
         {
             //вычислять точное значеие?
             Thread.Sleep(Duration);
-            OnSaleFinished(LastBid);
+            OnSaleFinished();
 
         }
 
         protected virtual void OnBidMaked(Bid newBid)
         {
-            EventHandler<BidEventArgs> local = BidMaked;
+            EventHandler<EventArgs<Bid>> local = BidMaked;
             if (local != null)
             {
-                local(this,new BidEventArgs(newBid));
+                local(this,new EventArgs<Bid>(newBid));
             }
         }
-        protected virtual void OnSaleFinished(Bid lastBid)
+        protected virtual void OnSaleFinished()
         {
-            EventHandler<EventArgs> local = SaleFinished;
+            EventHandler<EventArgs<Sale>> local = SaleFinished;
             if (local != null)
             {
-                local(this, new EventArgs());
+                local(this, new EventArgs<Sale>(this));
             }
         }
     }

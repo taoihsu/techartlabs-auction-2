@@ -14,7 +14,6 @@ namespace auction_2
             var settings = new AuctionSettings();
             // Создаем аукцион и регистрируем продавцов и покупателей
             var auction = new Auction();
-
             //var bidSignaler = new Thread(BidSignal);
             //bidSignaler.Start(auction);
 
@@ -30,15 +29,22 @@ namespace auction_2
 
 
             auction.AddCategory(new Category("Elite"));
+            auction.AddCategory(new Category("Nom-nom"));
             auction.AddSeries(new Series("Musical Instruments"));
+            auction.AddSeries(new Series("Fruits"));
 
             var sale1 = new Sale("Hamer Standard guitar USA 1976",
                                   new Lot("Hamer Standard guitar USA 1976", "Super Guitar!", null),
                                   auction.Series.FirstOrDefault(s => s.Name == "Musical Instruments"),
                                   auction.Sellers.First(s => s.Login == "slogin2"), 101, 3, TimeSpan.FromSeconds(1.1),
                                   auction.Categories.FirstOrDefault(c => c.Name == "Elite"));
+            var sale2 = new Sale("Apple",
+                                  new Lot("Green apple", "=^__^=", null),
+                                  auction.Series.FirstOrDefault(s => s.Name == "Fruits"),
+                                  auction.Sellers.First(s => s.Login == "slogin1"), 10, 1, TimeSpan.FromSeconds(4),
+                                  auction.Categories.FirstOrDefault(c => c.Name == "Nom-nom"));
             auction.AddSale(sale1);
-
+            auction.AddSale(sale2);
 
             //var waitForFinish = new Thread(FinishMessage);
             //waitForFinish.Start(sale1);
@@ -52,19 +58,28 @@ namespace auction_2
             var b7 = new Bid(sale1, 125, auction.Buyers.First(b => b.Login == "blogin3"));
             var b8 = new Bid(sale1, 150, auction.Buyers.First(b => b.Login == "blogin1"));
 
+            var b9 = new Bid(sale2, 15, auction.Buyers.First(b => b.Login == "blogin1"));
+            var b10 = new Bid(sale2, 23, auction.Buyers.First(b => b.Login == "blogin3"));
+            var b11 = new Bid(sale2, 29, auction.Buyers.First(b => b.Login == "blogin1"));
+
+
+
 
             sale1.BidMaked += ReportBid;
-            sale1.SaleFinished += ReportSaleFinish;
+            sale2.BidMaked += ReportBid;
+            //sale1.SaleFinished += ReportSaleFinish;
+            //sale2.SaleFinished += ReportSaleFinish;
+            auction.SaleFinished += ReportSaleFinish;
 
             auction.MakeBid(b1);
             Thread.Sleep(500);
-            auction.MakeBid(b2);
+            auction.MakeBid(b2);    auction.MakeBid(b9);
             Thread.Sleep(500);
             auction.MakeBid(b3);
             Thread.Sleep(500);
-            auction.MakeBid(b4);
+            auction.MakeBid(b4);    auction.MakeBid(b10);
             Thread.Sleep(500);
-            auction.MakeBid(b5);
+            auction.MakeBid(b5);    auction.MakeBid(b11);
             Thread.Sleep(500);
             auction.MakeBid(b6);
             Thread.Sleep(500);
@@ -73,20 +88,24 @@ namespace auction_2
             auction.MakeBid(b8);
             Thread.Sleep(500);
 
-
+            var activeBuyers = auction.GetActiveBuyers(100);
+            foreach (var activeBuyer in activeBuyers)
+            {
+                Console.WriteLine(activeBuyer.Login);
+            }
 
         }
 
-        public static void ReportBid(object sender, BidEventArgs args)
+        public static void ReportBid(object sender, EventArgs<Bid> args)
         {
-            var bid = args.Bid;
+            var bid = args.EventInfo;
             Console.WriteLine("bid:\t{0}\tbidder:\t{1}\tlot:\t{2}", bid.Value,
                                          bid.Bidder.Login, bid.Sale.Name);
         }
 
-        public static void ReportSaleFinish(object sender, EventArgs args)
+        public static void ReportSaleFinish(object sender, EventArgs<Sale> args)
         {
-            var sale = (Sale)sender;
+            var sale = args.EventInfo;
             if (sale.LastBid != null)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
