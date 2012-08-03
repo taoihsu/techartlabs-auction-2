@@ -4,12 +4,14 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
+using auction_2.ActiveBuyersBehavior;
+using auction_2.Events;
+using auction_2.Interfaces;
 
 namespace auction_2
 {
     public class Auction
     {
-
         private readonly List<Bid> _bids;
         private readonly List<Lot> _lots;
         private readonly List<Sale> _sales;
@@ -25,9 +27,27 @@ namespace auction_2
         public ReadOnlyCollection<Seller> Sellers {get{return new ReadOnlyCollection<Seller>(_sellers);}} 
         public ReadOnlyCollection<Buyer> Buyers {get {return new ReadOnlyCollection<Buyer>(_buyers);}}
         public AuctionSettings Settings { get; private set; }
-        
+        public IActiveBuyersBehavior ActiveBuyersBehavior { get; set; }
 
+        public event EventHandler<EventArgs<Sale>> SaleStarted;
+        public event EventHandler<EventArgs<Bid>> BidMaked;
+        public event EventHandler<EventArgs<Sale>> SaleFinished;
 
+        protected virtual void OnSaleFinished(Sale sale)
+        {
+            EventHandler<EventArgs<Sale>> handler = SaleFinished;
+            if (handler != null) handler(this, new EventArgs<Sale>(sale));
+        }
+        protected virtual void OnBidMaked(Bid newBid)
+        {
+            EventHandler<EventArgs<Bid>> handler = BidMaked;
+            if (handler != null) handler(this, new EventArgs<Bid>(newBid));
+        }
+        protected virtual void OnSaleCreated(Sale newSale)
+        {
+            EventHandler<EventArgs<Sale>> handler = SaleStarted;
+            if (handler != null) handler(this, new EventArgs<Sale>(newSale));
+        }
 
         public Auction()
         {
@@ -40,6 +60,7 @@ namespace auction_2
             _buyers = new List<Buyer>();
 
             Settings = new AuctionSettings();
+            ActiveBuyersBehavior = new SummarySalesBehavior();
 
         }
 
@@ -84,6 +105,8 @@ namespace auction_2
 
                 AddLot(sale.Lot);
                 _sales.Add(sale);
+                OnSaleCreated(sale);
+                sale.SaleFinished += SaleFinish;
                 sale.Start();
             }
 
@@ -115,7 +138,13 @@ namespace auction_2
             {
                 _bids.Add(bid);
                 bid.Sale.LastBid = bid;
+                OnBidMaked(bid);
             }
+        }
+
+        public IEnumerable<Buyer> GetActiveBuyers(double percentage)
+        {
+            return ActiveBuyersBehavior.GetActiveBuyers(_sales, _bids, percentage);
         }
 
         // возвращает сумму успешных покупок
@@ -132,12 +161,15 @@ namespace auction_2
                    (s.LastBid == null || s.LastBid.Bidder != bid.Bidder);
 
         }
-
-        //ex ?
         private bool IsCorrectSale(Sale sale)
         {
             return !_sales.Contains(sale) && (_sellers.Contains(sale.Seller) && _series.Contains(sale.Series)) &&
                    sale.Lot != null;
+        }
+
+        protected void SaleFinish(object sender, EventArgs<Sale> args)
+        {
+            OnSaleFinished(args.EventInfo);
         }
     }
 
