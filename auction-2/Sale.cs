@@ -59,19 +59,14 @@ namespace auction_2
         public void Start()
         {
             StartTime = DateTime.Now;
-            var waitForfinishThread = new Thread(WaitForFinish);
-            waitForfinishThread.Start();          
+            var timer = new Timer(ReportFinish, null, (int)Duration.TotalMilliseconds, -1);
         }
 
-        private void WaitForFinish()
+        private void ReportFinish(object state)
         {
-            //вычислять точное значеие?
-            Thread.Sleep(Duration);
-            //сюда забомбить Таймер!
             OnSaleFinished();
-
         }
-
+        
         protected virtual void OnBidMaked(Bid newBid)
         {
             EventHandler<EventArgs<Bid>> local = BidMaked;
