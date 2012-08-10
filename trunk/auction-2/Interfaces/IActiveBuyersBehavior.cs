@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Auction.Users;
 
-namespace auction_2.Interfaces
+namespace Auction.Interfaces
 {
     public interface IActiveBuyersBehavior
     {

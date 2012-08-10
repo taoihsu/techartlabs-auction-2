@@ -1,4 +1,4 @@
-﻿namespace auction_2
+﻿namespace Auction
 {
     public class Series
     {
