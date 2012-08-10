@@ -8,7 +8,7 @@
     <ProjectGuid>{757F80CB-76D5-41FA-B08A-2182522CAD2C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>auction_2</RootNamespace>
+    <RootNamespace>auction</RootNamespace>
     <AssemblyName>auction-2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -52,11 +52,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveBuyersBehavior\SummarySalesBehavior.cs" />
@@ -64,12 +59,13 @@
     <Compile Include="AuctionSettings.cs" />
     <Compile Include="Bid.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="ConfigurationStrings.cs" />
     <Compile Include="Events\EventArgs.cs" />
     <Compile Include="Interfaces\IActiveBuyersBehavior.cs" />
     <Compile Include="Lot.cs" />
-    <Compile Include="people\Buyer.cs" />
-    <Compile Include="people\Person.cs" />
-    <Compile Include="people\Seller.cs" />
+    <Compile Include="Users\Buyer.cs" />
+    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\Seller.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sale.cs" />

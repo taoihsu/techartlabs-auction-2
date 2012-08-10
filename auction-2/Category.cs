@@ -1,4 +1,4 @@
-﻿namespace auction_2
+﻿namespace Auction
 {
     public class Category
     {
@@ -10,7 +10,5 @@
             Name = name;
             Restriction = value;
         }
-
-
     }
 }

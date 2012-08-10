@@ -1,6 +1,6 @@
-﻿namespace auction_2
+﻿namespace Auction.Users
 {
-    public class Seller: Person
+    public class Seller: User
     {
         internal Seller(string login, string firstName, string secondName)
             : base(login, firstName, secondName)

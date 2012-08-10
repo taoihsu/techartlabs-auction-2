@@ -1,6 +1,7 @@
 ﻿using System;
+using Auction.Users;
 
-namespace auction_2
+namespace Auction
 {
     public class Bid
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace auction_2
+namespace Auction
 {
     public class Lot
     {
@@ -16,9 +16,12 @@ namespace auction_2
             Name = name;
             Discription = discription;
             Image = image;
-            if (!lots.Any()) return;
-            Lots = new List<Lot>();
-            Lots.AddRange(lots);
+
+            if (lots.Any())
+            {
+                Lots = new List<Lot>();
+                Lots.AddRange(lots);
+            }
         }
     }
 }

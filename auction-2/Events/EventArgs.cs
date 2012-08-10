@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace auction_2.Events
+namespace Auction.Events
 {
-    public class EventArgs<T>: EventArgs
+    public class ActionEventArgs<T>: EventArgs
     {
         public T EventInfo { get; private set; }
 
-        public EventArgs(T eventInfo)
+        public ActionEventArgs(T eventInfo)
         {
             EventInfo = eventInfo;
         }

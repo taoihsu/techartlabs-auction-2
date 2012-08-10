@@ -1,6 +1,6 @@
-﻿namespace auction_2
+﻿namespace Auction.Users
 {
-    public class Buyer : Person
+    public class Buyer : User
     {
         public Buyer(string login, string firstName, string secondName)
             : base(login, firstName, secondName)

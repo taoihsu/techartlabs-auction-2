@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using auction_2.Interfaces;
+using Auction.Interfaces;
+using Auction.Users;
 
-namespace auction_2.ActiveBuyersBehavior
+namespace Auction.ActiveBuyersBehavior
 {
     public class SummarySalesBehavior : IActiveBuyersBehavior
     {

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
+using auction;
 
-namespace auction_2
+namespace Auction
 {
     public class AuctionSettings
     {
@@ -17,7 +15,8 @@ namespace auction_2
 
         public void ReLoadConfig()
         {
-            MinSaleDuration = TimeSpan.FromSeconds(Double.Parse(ConfigurationManager.AppSettings["MinSaleDurationInSeconds"]));
+            MinSaleDuration = TimeSpan.FromSeconds(Double.Parse(
+                ConfigurationManager.AppSettings[AuctionConfigurationStrings.MinSaleDurationInSec]));
         }
     }
 }
